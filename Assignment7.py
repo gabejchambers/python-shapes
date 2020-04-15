@@ -59,11 +59,7 @@ def pack(allRect, canvasSize):
 
 # reads in a file and returns a string
 def readIn(fp):
-    pn = re.search(r'(.*?\\)([^\\]*?)$', fp)
-    path = pn.group(1)
-    name = pn.group(2)
-    os.chdir(path)
-    with open(name, 'r+') as f:
+    with open(fp, 'r+') as f:
         lines = []
         for line in f:
             lines.append(
