@@ -1,6 +1,7 @@
 import os
 from tkinter import *
 import re
+import rpack
 
 # 1) create custom canvas class:
 
@@ -43,7 +44,7 @@ class CustomCanvas:
         self.c.pack()
 
     def set_rectangle(self, rect):
-        self.create_rectangle(rect.x, rect.y, rect.x+rect.width, rect.y+rect.height, fill="#00f")
+        self.c.create_rectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height, fill="#00f")
 
 
 class Rectangle:
@@ -64,8 +65,20 @@ class Rectangle:
 def pack(allRect, canvasSize):
     # where allRect is a list of Rectangle obejcts
     # canvasSize os a tuple containing a canvas (height, width)
+    rectangle_sizes = []
+    for rect in allRect:
+        rectangle_sizes.append((rect.width, rect.height))
+    print(rectangle_sizes)  # testing
+    rectangle_positions = rpack.pack(rectangle_sizes)
+    print(rectangle_positions)
 
-    pass
+    rtn_rects = []
+    for rectIndex in range(len(allRect)):
+        rtn_rects.append(
+            Rectangle(allRect[rectIndex].height, allRect[rectIndex].width, rectangle_positions[rectIndex][0],
+                      rectangle_positions[rectIndex][1]))
+
+    return rtn_rects
 
 
 # reads in a file and returns a string
@@ -77,7 +90,8 @@ def readIn(fp):
     with open(name, 'r+') as f:
         lines = []
         for line in f:
-            lines.append((int(re.search(r'(.*),.*', line.strip()).group(1)), int(re.search(r'.*,(.*)', line.strip()).group(1))))
+            lines.append(
+                (int(re.search(r'(.*),.*', line.strip()).group(1)), int(re.search(r'.*,(.*)', line.strip()).group(1))))
         return lines
 
 
@@ -89,29 +103,32 @@ def main():
     canvasParams = textin.pop(0)
     canvas = CustomCanvas(canvasParams[0], canvasParams[1])
 
+    # create initial rectangle objects at origin
     rectangles = []
+    rectangle_sizes = rpack.pack(textin)
     for dim in textin:
         rectangles.append(Rectangle(dim[0], dim[1]))
 
+    new_rectangles = pack(rectangles, canvasParams)
 
-    #put rectanges on canvas:
-    for rect in rectangles:
+    # put rectanges on canvas:
+    for rect in new_rectangles:
         canvas.set_rectangle(rect)
 
-
     #####TESTING##########
-    print(textin)  # testing
-    for rect in rectangles:
-        print(rect.width, rect.height)
+    # print(canvasParams)
+    # print(rectangle_sizes)  # testing
+    # for rect in rectangles:
+    #    print(rect.width, rect.height)
     #####END TESTING######
 
 
-#call main():
+# call main():
 master = Tk()
 main()
-#mainloop()
+mainloop()
 
 #####TESTING######
-#myCanvas = CustomCanvas(150, 1000)
-#print()
+# myCanvas = CustomCanvas(150, 1000)
+# print()
 ###END TESTING####
