@@ -24,12 +24,12 @@ class CustomCanvas:
     def __init__(self, height, width):
         self.height = height  # int
         self.width = width  # int
-        self.c = Canvas(master, height=height, width=width)
+        self.master = Tk()
+        self.c = Canvas(self.master, height=height, width=width)
         self.c.pack()
 
     def set_rectangle(self, rect):
         self.c.create_rectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height, fill="#00f")
-
 
 class Rectangle:
 
@@ -38,7 +38,6 @@ class Rectangle:
         self.width = width  # int
         self.x = x  # int
         self.y = y  # int
-
 
 # pack will take the given list of rectangles and determine a location
 # for each rectangle so that each rectangle does not overlap another and each
@@ -64,7 +63,6 @@ def pack(allRect, canvasSize):
         rtn_rects.append(Rectangle(rect.height, rect.width, rect.x, rect.y))
     return rtn_rects
 
-
 # reads in a file and returns a list of tuples
 def readIn(fp):
     with open(fp, 'r+') as f:
@@ -76,10 +74,10 @@ def readIn(fp):
 
 
 def main():
-    pythonFileName = sys.argv.pop(0)
-    fpath = sys.argv.pop(0)
+    fpath = sys.argv.pop(1)
     textin = readIn(fpath)
 
+    #create canvas
     canvasParams = textin.pop(0)
     canvas = CustomCanvas(canvasParams[0], canvasParams[1])
 
@@ -94,13 +92,14 @@ def main():
     # put rectanges on canvas:
     for rect in new_rectangles:
         canvas.set_rectangle(rect)
+
     # display canvas
     mainloop()
+# END MAIN
 
-
-# this is needed:
-master = Tk()
 
 # call main():
 if __name__ == '__main__':
     main()
+    #mainloop()
+
