@@ -34,30 +34,23 @@ class Rectangle:
 def pack(allRect, canvasSize):
     # where allRect is a list of Rectangle obejcts
     # canvasSize os a tuple containing a canvas (height, width)
+    packer = newPacker()
     rectangle_sizes = []
     for rect in allRect:
         rectangle_sizes.append((rect.width, rect.height))
-
-    packer = newPacker()
-
     # Add the rectangles to packing queue
     for r in rectangle_sizes:
         packer.add_rect(*r)
-
-    packer.add_bin(*canvasSize)
-
-    packer.pack()
-
-    bin = packer[0]
-
+    packer.add_bin(*canvasSize)  # add the bins, in this case just 1
+    packer.pack()  # the packing algorithm
     rtn_rects = []
-    for rect in bin:
+    # add and instantiate all rectangles to list
+    for rect in packer[0]:
         rtn_rects.append(Rectangle(rect.height, rect.width, rect.x, rect.y))
-
     return rtn_rects
 
 
-# reads in a file and returns a string
+# reads in a file and returns a list of tuples
 def readIn(fp):
     with open(fp, 'r+') as f:
         lines = []
@@ -65,7 +58,6 @@ def readIn(fp):
             lines.append(
                 (int(re.search(r'(.*),.*', line.strip()).group(1)), int(re.search(r'.*,(.*)', line.strip()).group(1))))
         return lines
-
 
 
 def main():
@@ -81,16 +73,18 @@ def main():
     for dim in textin:
         rectangles.append(Rectangle(dim[0], dim[1]))
 
+    # pack
     new_rectangles = pack(rectangles, canvasParams)
 
     # put rectanges on canvas:
     for rect in new_rectangles:
         canvas.set_rectangle(rect)
-
+    # display canvas
     mainloop()
 
-# call main():
+#this is needed:
 master = Tk()
-main()
 
-
+# call main():
+if __name__ == '__main__':
+    main()
