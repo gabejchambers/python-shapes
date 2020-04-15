@@ -1,38 +1,7 @@
 import os
 from tkinter import *
 import re
-import rpack
-
-# 1) create custom canvas class:
-
-'''
-class example:
-
-# Class for Computer Science Student
-class Dog:
-
-    # Class Variable
-    animal = 'dog'
-
-    # The init method or constructor
-    def __init__(self, breed):
-
-        # Instance Variable
-        self.breed = breed
-
-    # Adds an instance variable
-    def setColor(self, color):
-        self.color = color
-
-    # Retrieves instance variable
-    def getColor(self):
-        return self.color
-
-# Driver Code
-Rodger = Dog("pug")
-Rodger.setColor("brown")
-print(Rodger.getColor())
-'''
+from rectpack import newPacker
 
 
 class CustomCanvas:
@@ -68,15 +37,22 @@ def pack(allRect, canvasSize):
     rectangle_sizes = []
     for rect in allRect:
         rectangle_sizes.append((rect.width, rect.height))
-    print(rectangle_sizes)  # testing
-    rectangle_positions = rpack.pack(rectangle_sizes)
-    print(rectangle_positions)
+
+    packer = newPacker()
+
+    # Add the rectangles to packing queue
+    for r in rectangle_sizes:
+        packer.add_rect(*r)
+
+    packer.add_bin(*canvasSize)
+
+    packer.pack()
+
+    bin = packer[0]
 
     rtn_rects = []
-    for rectIndex in range(len(allRect)):
-        rtn_rects.append(
-            Rectangle(allRect[rectIndex].height, allRect[rectIndex].width, rectangle_positions[rectIndex][0],
-                      rectangle_positions[rectIndex][1]))
+    for rect in bin:
+        rtn_rects.append(Rectangle(rect.height, rect.width, rect.x, rect.y))
 
     return rtn_rects
 
@@ -105,7 +81,6 @@ def main():
 
     # create initial rectangle objects at origin
     rectangles = []
-    rectangle_sizes = rpack.pack(textin)
     for dim in textin:
         rectangles.append(Rectangle(dim[0], dim[1]))
 
@@ -115,20 +90,10 @@ def main():
     for rect in new_rectangles:
         canvas.set_rectangle(rect)
 
-    #####TESTING##########
-    # print(canvasParams)
-    # print(rectangle_sizes)  # testing
-    # for rect in rectangles:
-    #    print(rect.width, rect.height)
-    #####END TESTING######
-
+    mainloop()
 
 # call main():
 master = Tk()
 main()
-mainloop()
 
-#####TESTING######
-# myCanvas = CustomCanvas(150, 1000)
-# print()
-###END TESTING####
+
