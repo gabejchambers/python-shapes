@@ -2,6 +2,22 @@ from tkinter import *
 import re
 from rectpack import newPacker
 
+'''
+
+OKAY, SO:
+this doesnt work as a libary bc of weird placement with master=Tk() and mainloop(). It does work as standalone file.
+I dont understand how to fix this.
+If I call mainloop() in custom canvas init, how will the rectangles ever get added to the canvas?
+Since I cant have them passed as a parameter, and I cant add anything after it is displayed.
+So either how do you add things to a canvas after mainloop() (does not seem possible)
+OR how do I add the rectangles to the canvas in the init function without receiving them as parameters?
+
+Also, I cannot figure out how I need to use Tk().
+Canvas() from tkinter does not work inside my CustomCanvas class unless a GLOBAL variable is set to Tk()
+This global variable must be used as the first argument of the tkinter Canvas() function from within my class.
+Surely this doesnt work when the program is used as a library.
+
+'''
 
 class CustomCanvas:
 
