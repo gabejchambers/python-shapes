@@ -1,0 +1,8 @@
+library name:
+rectpack
+
+install with:
+pip install rectpack
+
+link to docs:
+https://github.com/secnot/rectpack
