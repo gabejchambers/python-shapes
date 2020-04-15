@@ -1,4 +1,3 @@
-import os
 from tkinter import *
 import re
 from rectpack import newPacker
@@ -82,7 +81,8 @@ def main():
     # display canvas
     mainloop()
 
-#this is needed:
+
+# this is needed:
 master = Tk()
 
 # call main():
